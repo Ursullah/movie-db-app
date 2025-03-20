@@ -12,7 +12,7 @@ const DisplayMovie = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`https://www.omdbapi.com/?s=${search}&apikey=855a7843`);
+            const response = await fetch(`http://www.omdbapi.com/?apikey=[855a7843]&` + new URLSearchParams({ s: search }));
             if (!response.ok) {
                 throw new Error("Failed to fetch movies");
             }
@@ -52,7 +52,7 @@ const DisplayMovie = () => {
     return (
         <div className="p-4">
             <form onSubmit={handleSubmit} className="mb-4">
-                <label htmlFor='search' className="block text-lg font-bold rounded-full">Search Movie:</label>
+                <label htmlFor='search' className="block text-lg font-bold text-purple-700 rounded-full">Search Movie:</label>
                 <input 
                     type='text' 
                     value={search} 
@@ -60,7 +60,7 @@ const DisplayMovie = () => {
                     placeholder="Enter movie name..." 
                     className="border p-2 rounded-full"
                 />
-                <button type='submit' className="bg-blue-500 text-white px-4 py-2 mt-2 rounded-full">Search</button>
+                <button type='submit' className="bg-purple-700 text-white px-4 py-2 mt-2 rounded-full">Search</button>
             </form>
 
             {/* Show loading message */}
@@ -70,7 +70,7 @@ const DisplayMovie = () => {
             {error && <p className="text-red-500">{error}</p>}
 
             {/* Display movies */}
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-7 md:grid-cols-3 lg:grid-cols-4">
                 {movies.length === 0 ? (
                     <p>No movies found</p>
                 ) : (

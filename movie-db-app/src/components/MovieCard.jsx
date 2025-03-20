@@ -8,7 +8,7 @@ const MovieCard = ({ movie }) => {
   }
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-4 transition-transform transform hover:scale-105">
+    <div className="bg-white shadow-lg rounded-4xl p-4 transition-transform transform hover:scale-105">
       {/* Clickable Image Links to Movie Details */}
       <Link to={`/movies/${movie.id}`}>
         <img
