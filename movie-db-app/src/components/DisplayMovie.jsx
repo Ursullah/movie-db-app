@@ -1,42 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import MovieCard from './MovieCard';
+import data from '../data.json';
 
 const DisplayMovie = () => {
-    const [movies, setMovies] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [movies, setMovies] = useState([]); // Initialize with an empty array
     const [search, setSearch] = useState("");
+    const [filteredMovies, setFilteredMovies] = useState([]);
 
-    // Fetch movies function
-    const fetchMovies = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            const response = await fetch(`http://www.omdbapi.com/?apikey=855a7843&` + new URLSearchParams({ s: search }));
-            if (!response.ok) {
-                throw new Error("Failed to fetch movies");
-            }
-            const data = await response.json();
-            if (data.Search) {
-                setMovies(data.Search);
-                localStorage.setItem("movies", JSON.stringify(data.Search));
-            } else {
-                setMovies([]); // If no movies are found
-            }
-        } catch (error) {
-            setError(error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Load movies from local storage on component mount
     useEffect(() => {
-        const storedMovies = JSON.parse(localStorage.getItem("movies"));
-        if (storedMovies) {
-            setMovies(storedMovies);
-        }
+        setMovies(data.Search);
+        setFilteredMovies(data.Search); // Directly set movies from imported JSON
     }, []);
 
     // Handle Search Input
@@ -44,16 +18,24 @@ const DisplayMovie = () => {
         setSearch(e.target.value);
     };
 
-    // Handle Search Submission
+    // Handle Search Submission (Filter Movies)
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetchMovies();
+        if(search){
+            setFilteredMovies(movies);
+        } else {
+           const results = movies.filter(movie => 
+            movie.Title.toLowerCase().includes(search.toLowerCase())
+           );
+            setFilteredMovies(results);
+    }
     };
 
     return (
         <div className="p-4">
+            {/* Search Form */}
             <form onSubmit={handleSubmit} className="mb-4">
-                <label htmlFor='search' className="block text-lg font-bold text-purple-700 rounded-full">Search Movie:</label>
+                <label htmlFor='search' className="block text-lg font-bold text-purple-700">Search Movie:</label>
                 <input 
                     type='text' 
                     value={search} 
@@ -64,25 +46,17 @@ const DisplayMovie = () => {
                 <button type='submit' className="bg-purple-700 text-white px-4 py-2 mt-2 cursor-pointer rounded-full">Search</button>
             </form>
 
-            {/* Show loading message */}
-            {loading && <p>Loading...</p>}
-
-            {/* Show error message */}
-            {error && <p className="text-red-500">{error}</p>}
-
             {/* Display movies */}
-            <Link>
-            {/* Grid responsive layout */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:grid-cols-1">
-                {movies.length === 0 ? (
-                    <p>No movies found</p>
+            <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 gap-8 md:grid-cols-1">
+                {movies && console.log(movies)}
+                { movies && movies.length === 0 ? (
+                    <p className="text-center text-purple-500">No movies found</p>
                 ) : (
-                    movies.map((movie) => (
+                    movies && movies.map((movie) => (
                         <MovieCard key={movie.imdbID} movie={movie} />
                     ))
                 )}
             </div>
-            </Link>
         </div>
     );
 };

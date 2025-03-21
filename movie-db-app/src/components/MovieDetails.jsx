@@ -1,54 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import data from '../data.json';
 
 const MovieDetails = () => {
     const { id } = useParams();
     const [movie, setMovie] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-
-    // Fetch movie details function 
-    const fetchMovie = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            const response = await fetch(`http://www.omdbapi.com/?apikey=[855a7843]&` + new URLSearchParams({ i: id }));
-            if (!response.ok) {
-                throw new Error("Failed to fetch movie");
-            }
-            const data = await response.json();
-            setMovie(data);
-        } catch (error) {
-            setError(error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     // Load movie details on component mount
     useEffect(() => {
-        fetchMovie();
-    }, []);
+        const selectedMovie = data.Search.find((movie) => movie.imdbID === id);
+        setMovie(selectedMovie);
+    }, [id]);
 
     // Ensure movie exists before rendering
-    if (loading) {
-        return <p className="text-center text-purple-500">Loading...</p>;
+    if (!movie) {
+        return <p className="text-center text-purple-500">Movie not found!</p>;
     }
 
-    if (error) {
-        return <p className="text-center text-red-500">{error}</p>;
-    }
-
-  return (
-    <div>
-      <div>
-        <h2>{movie.title}</h2>
-        <img src={movie.poster} alt={movie.title} />
-        <p>{movie.year}</p>
-        <p>{movie.plot}</p>
-        
-      </div>
-    </div>
-  )
+    return (
+        <div className="p-6 bg-purple-400 min-h-screen flex items-center justify-center">
+            <div className="bg-white shadow-lg rounded-xl p-6 max-w-md">
+                <h2 className='text-xl font-semibold mb-4'>{movie.Title}</h2>
+                <img 
+                    className='w-full h-auto object-cover rounded-lg'
+                    src={movie.Poster} 
+                    alt={movie.Title} 
+                />
+                <p className="mt-2 text-gray-700"><strong>Year:</strong> {movie.Year}</p>
+                <p className="mt-2 text-gray-700"><strong>IMDB ID:</strong> {movie.imdbID}</p>
+                <p className="mt-2 text-gray-700"><strong>Plot:</strong> {movie.Plot || "No plot available."}</p>
+            </div>
+        </div>
+    );
 }
 
-export default MovieDetails
+export default MovieDetails;
