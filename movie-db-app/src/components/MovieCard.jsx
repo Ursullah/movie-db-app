@@ -8,15 +8,15 @@ const MovieCard = ({ movie }) => {
   }
 
   return (
+    
     <div className="bg-white shadow-lg rounded-4xl p-4 transition-transform transform hover:scale-105">
       {/* Clickable Image Links to Movie Details */}
-      <Link to={`/movies/${movie.id}`}>
+      {`/movies/${movie.id}`}
         <img
-          src={movie.poster || "https://via.placeholder.com/200"} // Fallback image
+          src={movie.poster || "/assets/MovieCard_Placeholder.jpg"} // Fallback image
           alt={movie.title}
-          className="w-full h-60 object-cover rounded-lg"
+          className="w-60 h-60 object-cover rounded-lg"
         />
-      </Link>
 
       <h2 className="text-lg font-semibold mt-2">{movie.title}</h2>
       <p className="text-gray-600">{movie.year}</p>

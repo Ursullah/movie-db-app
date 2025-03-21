@@ -8,6 +8,7 @@ function App() {
     <Router>
       <div className="flex">
         <NavPage /> {/* ✅ Now using the imported NavPage */}
+        </div>
 
 
       <div className="ml-60 flex-1 p-6 text-white bg-black min-h-screen">
@@ -20,7 +21,6 @@ function App() {
 
       {/* Display Movie Component */}
       <DisplayMovie />
-      </div>
       </div>
     </Router>
   );

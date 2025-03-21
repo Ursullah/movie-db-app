@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import MovieCard from './MovieCard';
 
 const DisplayMovie = () => {
@@ -12,7 +13,7 @@ const DisplayMovie = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`http://www.omdbapi.com/?apikey=[855a7843]&` + new URLSearchParams({ s: search }));
+            const response = await fetch(`http://www.omdbapi.com/?apikey=855a7843&` + new URLSearchParams({ s: search }));
             if (!response.ok) {
                 throw new Error("Failed to fetch movies");
             }
@@ -60,7 +61,7 @@ const DisplayMovie = () => {
                     placeholder="Enter movie name..." 
                     className="border p-2 rounded-full"
                 />
-                <button type='submit' className="bg-purple-700 text-white px-4 py-2 mt-2 rounded-full">Search</button>
+                <button type='submit' className="bg-purple-700 text-white px-4 py-2 mt-2 cursor-pointer rounded-full">Search</button>
             </form>
 
             {/* Show loading message */}
@@ -70,7 +71,9 @@ const DisplayMovie = () => {
             {error && <p className="text-red-500">{error}</p>}
 
             {/* Display movies */}
-            <div className="grid grid-cols-1 gap-7 md:grid-cols-3 lg:grid-cols-4">
+            <Link>
+            {/* Grid responsive layout */}
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:grid-cols-1">
                 {movies.length === 0 ? (
                     <p>No movies found</p>
                 ) : (
@@ -79,6 +82,7 @@ const DisplayMovie = () => {
                     ))
                 )}
             </div>
+            </Link>
         </div>
     );
 };
