@@ -1,62 +1,76 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import MovieCard from './MovieCard';
-import data from '../data.json';
+ 
+const API_KEY = "8553a7843";
 
 const DisplayMovie = () => {
-    const [movies, setMovies] = useState([]); // Initialize with an empty array
+    const [movies, setMovies] = useState([]); 
     const [search, setSearch] = useState("");
-    const [filteredMovies, setFilteredMovies] = useState([]);
+    const[loading, setLoading] = useState(false);
+
 
     useEffect(() => {
-        setMovies(data.Search);
-        setFilteredMovies(data.Search); // Directly set movies from imported JSON
-    }, []);
+    fetchMovies();
+    },[]);
+
+    const fetchMovies = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=star wars`);
+            if (!response.ok) {
+                throw new Error("Failed to fetch movies");
+            }
+            const data = await response.json();
+            if (data.Search) {
+                setMovies(data.Search);
+            } else {
+                setMovies([]);
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     // Handle Search Input
     const handleSearch = (e) => {
         setSearch(e.target.value);
     };
 
+
     // Handle Search Submission (Filter Movies)
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(search){
-            setFilteredMovies(movies);
-        } else {
-           const results = movies.filter(movie => 
-            movie.Title.toLowerCase().includes(search.toLowerCase())
-           );
-            setFilteredMovies(results);
-    }
+      if (search === "") {
+        return;
+      }
     };
 
     return (
+
         <div className="p-4">
             {/* Search Form */}
-            <form onSubmit={handleSubmit} className="mb-4">
-                <label htmlFor='search' className="block text-lg font-bold text-purple-700">Search Movie:</label>
+            <form onSubmit={handleSubmit} className="mb-4 flex gap-2">
                 <input 
                     type='text' 
                     value={search} 
                     onChange={handleSearch}
-                    placeholder="Enter movie name..." 
-                    className="border p-2 rounded-full"
+                    placeholder="Search for a movie..." 
+                    className="border p-2 rounded-full w-60"
                 />
-                <button type='submit' className="bg-purple-700 text-white px-4 py-2 mt-2 cursor-pointer rounded-full">Search</button>
+                <button type='submit' className="bg-purple-700 text-white px-4 py-2 rounded-full">Search</button>
             </form>
 
-            {/* Display movies */}
-            <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 gap-8 md:grid-cols-1">
-                {movies && console.log(movies)}
-                { movies && movies.length === 0 ? (
-                    <p className="text-center text-purple-500">No movies found</p>
-                ) : (
-                    movies && movies.map((movie) => (
-                        <MovieCard key={movie.imdbID} movie={movie} />
-                    ))
-                )}
+           {loading ? (
+            <p className="text-center text-purple-500">Loading...</p>
+            ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {movies.map((movie) => (
+                    <MovieCard key={movie.imdbID} movie={movie} />
+                ))}
             </div>
+            )}
         </div>
     );
 };

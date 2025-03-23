@@ -1,29 +1,30 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import NavPage from "./components/NavPage";
 import DisplayMovie from "./components/DisplayMovie";
-import NavPage from "./components/NavPage"; // ✅ Import NavPage
+import Discover from "./components/Discover";
+import MovieDetails from "./components/MovieDetails";
 
-function App() {
-  return (
-    <Router>
-      <div className="flex">
-        <NavPage /> {/* ✅ Now using the imported NavPage */}
-        </div>
+const App = () => {
+    return (
+        <Router>
+            <div className="flex">
+                {/* Sidebar Navigation */}
+                <NavPage />
 
-
-      <div className="ml-60 flex-1 p-6 text-white bg-black min-h-screen">
-      <Routes>
-        <Route path="/discover" element={<h1 className="text-center mt-10">Discover</h1>} />
-        <Route path="/movies" element={<h1 className="text-center mt-10">Movies</h1>} />
-        <Route path="/tv" element={<h1 className="text-center mt-10">TV</h1>} />
-        <Route path="/profile" element={<h1 className="text-center mt-10">Profile</h1>} />
-      </Routes>
-
-      {/* Display Movie Component */}
-      <DisplayMovie />
-      </div>
-    </Router>
-  );
-}
+                {/* Main Content Area */}
+                <div className="ml-60 p-6 w-full">
+                    <Routes>
+                        <Route path="/" element={<DisplayMovie />} />
+                        <Route path="/discover" element={<Discover />} />
+                        <Route path="/movies" element={<DisplayMovie />} />
+                        <Route path="/movies/:id" element={<MovieDetails />} />
+                        <Route path="/tv" element={<h1 className='text-2xl text-center'>TV Shows Page (Coming Soon)</h1>} />
+                    </Routes>
+                </div>
+            </div>
+        </Router>
+    );
+};
 
 export default App;

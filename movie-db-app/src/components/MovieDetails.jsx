@@ -1,18 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import data from '../data.json';
+
+const API_KEY = "8553a7843"
 
 const MovieDetails = () => {
     const { id } = useParams();
     const [movie, setMovie] = useState(null);
 
-    // Load movie details on component mount
     useEffect(() => {
-        const selectedMovie = data.Search.find((movie) => movie.imdbID === id);
-        setMovie(selectedMovie);
-    }, [id]);
+        fetchMovieDetails();
+    },[id]);
 
-    // Ensure movie exists before rendering
+    const fetchMovieDetails = async () => {
+        try {
+            const response = await fetch(`http://www.omdbapi.com/?apikey=${API_KEY}}&i=${id}`);
+            if (!response.ok) {
+                throw new Error("Failed to fetch movie details");
+            }
+            const data = await response.json();
+            setMovie(data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
     if (!movie) {
         return <p className="text-center text-purple-500">Movie not found!</p>;
     }
@@ -20,10 +32,10 @@ const MovieDetails = () => {
     return (
         <div className="p-6 bg-purple-400 min-h-screen flex items-center justify-center">
             <div className="bg-white shadow-lg rounded-xl p-6 max-w-md">
-                <h2 className='text-xl font-semibold mb-4'>{movie.Title}</h2>
+                <h2 className='text-xl font-semibold mb-4 text-center'>{movie.Title}</h2>
                 <img 
                     className='w-full h-auto object-cover rounded-lg'
-                    src={movie.Poster} 
+                    src={movie.Poster || "/assets/MovieCard_Placeholder.jpg"} 
                     alt={movie.Title} 
                 />
                 <p className="mt-2 text-gray-700"><strong>Year:</strong> {movie.Year}</p>
@@ -32,6 +44,6 @@ const MovieDetails = () => {
             </div>
         </div>
     );
-}
+};
 
 export default MovieDetails;
