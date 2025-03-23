@@ -19,7 +19,7 @@ const DisplayMovie = () => {
             const response = await fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=star wars`);
             if (!response.ok) {
                 throw new Error("Failed to fetch movies");
-            }
+            };
             const data = await response.json();
             if (data.Search) {
                 setMovies(data.Search);
@@ -48,8 +48,7 @@ const DisplayMovie = () => {
     };
 
     return (
-
-        <div className="p-4">
+    <div className="p-4">
             {/* Search Form */}
             <form onSubmit={handleSubmit} className="mb-4 flex gap-2">
                 <input 

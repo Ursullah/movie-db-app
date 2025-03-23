@@ -1,48 +1,45 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import MovieCard from "./MovieCard";
+
+const API_KEY = "855a7843";
 
 const Discover = () => {
-    const[newMovies, setNewMovies] = useState([]);
-    const[loading, setLoading] = useState(false);
+    const [movies, setMovies] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    const fetchNewMovies = async () => {
+    useEffect(() => {
+        fetchDiscoverMovies();
+    }, []);
+
+    const fetchDiscoverMovies = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`http://www.omdbapi.com/?apikey=855a7843&` + new URLSearchParams({ s: "new" }));
-            if (!response.ok) {
-                throw new Error("Failed to fetch movies");
-            }
+            const response = await fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=trending`);
             const data = await response.json();
-            if (data.Search) {
-                setNewMovies(data.Search);
-            } else {
-                setNewMovies([]);
-            }
+            setMovies(data.Search || []);
         } catch (error) {
-            console.error(error);
+            console.error("Error fetching discover movies:", error);
         } finally {
             setLoading(false);
         }
     };
 
-    useEffect(() => {
-        fetchNewMovies();
-    }, []);
-
-
-  return (
-    <div className="bg-white shadow-lg rounded-4xl p-4 transition-transform transform hover:scale-105">
-    {/* Clickable Image Links to Movie Details */}
-    {`/movies/${movie.id}`}
-      <img
-        src={movie.poster || "/assets/MovieCard_Placeholder.jpg"} // Fallback image
-        alt={movie.title}
-        className="w-60 h-60 object-cover rounded-lg"
-      />
-
-    <h2 className="text-lg font-semibold mt-2">{movie.title}</h2>
-    <p className="text-gray-600">{movie.year}</p>
-  </div>
-  )
-}
+    return (
+        <div className="p-4">
+            <h1 className="text-2xl font-bold text-purple-700 text-center mb-4">Discover Trending Movies</h1>
+            {loading ? (
+                <p className="text-center text-purple-500">Loading...</p>
+            ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 gap-8">
+                    {movies.length === 0 ? (
+                        <p className="text-center text-gray-500">No movies found</p>
+                    ) : (
+                        movies.map((movie) => <MovieCard key={movie.imdbID} movie={movie} />)
+                    )}
+                </div>
+            )}
+        </div>
+    );
+};
 
 export default Discover;
