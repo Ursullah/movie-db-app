@@ -13,7 +13,7 @@ const App = () => {
                 <NavPage />
 
                 {/* Main Content Area */}
-                <div className="ml-60 p-6 bg-black min-h-screen-100vh w-full">
+                <div className="ml-80 p-6 bg-black h-screen w-full">
                     <Routes>
                         <Route path="/" element={<DisplayMovie />} />
                         <Route path="/discover" element={<Discover />} />
@@ -21,7 +21,7 @@ const App = () => {
                         <Route path="/movies/:id" element={<MovieDetails />} />
                         <Route path="/tv" element={<h1 className='text-2xl text-center'>TV Shows Page (Coming Soon)</h1>} />
                     </Routes>
-                </div>
+                 </div>
             </div>
         </Router>
     );

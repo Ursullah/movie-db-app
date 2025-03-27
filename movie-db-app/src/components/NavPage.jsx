@@ -6,7 +6,7 @@ const NavPage = () => {
   const [search, setSearch] = useState("");
 
   return (
-    <div className="h-screen w-60 bg-black text-white fixed top-0 left-0 flex flex-col p-6">
+    <div className="h-screen w-80 bg-black text-white fixed top-0 left-0 flex flex-col p-6">
       {/* Logo */}
       <h1 className="text-2xl font-bold mt-20 text-purple-500 mb-8">FilmSphere</h1>
 

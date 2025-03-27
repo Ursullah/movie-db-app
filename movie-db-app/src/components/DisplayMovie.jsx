@@ -7,36 +7,23 @@ const DisplayMovie = () => {
     const [error, setError] = useState(null);
     const [search, setSearch] = useState("");
 
+    const BASE_URL = "http://www.omdbapi.com/?i=tt3896198&apikey=855a7843";
+
     // Fetch movies function
+   useEffect (() => {
     const fetchMovies = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            const response = await fetch(`http://www.omdbapi.com/?apikey=[855a7843]&` + new URLSearchParams({ s: search }));
-            if (!response.ok) {
-                throw new Error("Failed to fetch movies");
-            }
-            const data = await response.json();
-            if (data.Search) {
-                setMovies(data.Search);
-                localStorage.setItem("movies", JSON.stringify(data.Search));
-            } else {
-                setMovies([]); // If no movies are found
-            }
-        } catch (error) {
-            setError(error.message);
-        } finally {
-            setLoading(false);
+        const response = await fetch (`${BASE_URL}&s=${search}`);
+        const  movie = await response.json();
+        if (movie.Response === "True") {
+            setMovies(movie.Search || []);
+            setError(null);
+        } else {
+            setMovies([]);
+            setError(movie.Error);  
         }
     };
-
-    // Load movies from local storage on component mount
-    useEffect(() => {
-        const storedMovies = JSON.parse(localStorage.getItem("movies"));
-        if (storedMovies) {
-            setMovies(storedMovies);
-        }
-    }, []);
+    fetchMovies();
+    }, [search]);
 
     // Handle Search Input
     const handleSearch = (e) => {
@@ -46,7 +33,7 @@ const DisplayMovie = () => {
     // Handle Search Submission
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetchMovies();
+        setMovies();
     };
 
     return (
@@ -70,12 +57,17 @@ const DisplayMovie = () => {
             {error && <p className="text-red-500">{error}</p>}
 
             {/* Display movies */}
-            <div className="grid grid-cols-1 gap-7 md:grid-cols-3 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {movies.length === 0 ? (
                     <p>No movies found</p>
                 ) : (
                     movies.map((movie) => (
-                        <MovieCard key={movie.imdbID} movie={movie} />
+                        <MovieCard key={movie.imdbID} movie={{
+                            id: movie.imdbID,
+                            title: movie.Title,
+                            year: movie.Year,
+                            poster: movie.Poster
+                        }} />
                     ))
                 )}
             </div>

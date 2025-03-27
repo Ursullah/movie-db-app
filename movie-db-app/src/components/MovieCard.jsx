@@ -9,20 +9,20 @@ const MovieCard = ({ movie }) => {
   }
 
   return (
-    
+    <Link to={`/movies/${movie.id}`}>
     <div className="bg-white shadow-lg rounded-4xl p-4 transition-transform transform hover:scale-105">
-      {/* Clickable Image Links to Movie Details */}
-        <img
-          src={movie.poster || "/assets/MovieCard_Placeholder.jpg"} // Fallback image
-          alt={movie.title}
-          className="w-60 h-60 object-cover rounded-lg"
-        />
+      {/* Clickable Image that Links to Movie Details Page */}
+      <img
+        src={movie.poster}
+        alt={movie.title}
+        className="w-60 h-60 object-cover rounded-lg"
+      />
 
       <h2 className="text-lg font-semibold mt-2">{movie.title}</h2>
       <p className="text-gray-600">{movie.year}</p>
     </div>
+    </Link>
   );
-  <MovieDetails />
 };
 
 export default MovieCard;

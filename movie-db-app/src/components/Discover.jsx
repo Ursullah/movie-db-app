@@ -34,7 +34,12 @@ const Discover = () => {
                     {movies.length === 0 ? (
                         <p className="text-center text-gray-500">No movies found</p>
                     ) : (
-                        movies.map((movie) => <MovieCard key={movie.imdbID} movie={movie} />)
+                        movies.map((movie) => <MovieCard key={movie.imdbID} movie={{
+                            id: movie.imdbID,
+                            title: movie.Title,
+                            year: movie.Year,
+                            poster : movie.Poster
+                        }} />)
                     )}
                 </div>
             )}
