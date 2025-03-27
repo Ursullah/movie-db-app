@@ -8,10 +8,10 @@ const NavPage = () => {
   return (
     <div className="h-screen w-80 bg-black text-white fixed top-0 left-0 flex flex-col p-6">
       {/* Logo */}
-      <h1 className="text-2xl font-bold mt-20 text-purple-500 mb-8">FilmSphere</h1>
+      <h1 className="text-4xl font-extrabold  text-pink-600 mb-8">FILMSPHERE</h1>
 
       {/* Navigation Links */}
-      <nav className="space-y-20 font-semibold">
+      <nav className="space-y-30 mt-20 font-semibold items-center">
         {[
           { name: "Home", path: "/" },
           { name: "Discover", path: "/discover" },
@@ -21,10 +21,10 @@ const NavPage = () => {
           <Link
             key={item.path}
             to={item.path}
-            className={`block py-2 px-4 rounded-lg transition ${
+            className={`block py-2 px-25 rounded-lg transition ${
               location.pathname === item.path
-                ? "bg-purple-600 text-white"
-                : "hover:bg-gray-800"
+                ? "bg-pink-600 text-white"
+                : "hover:bg-gray-800 w-full"
             }`}
           >
             {item.name}

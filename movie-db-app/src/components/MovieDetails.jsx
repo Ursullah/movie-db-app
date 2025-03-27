@@ -20,7 +20,7 @@ const MovieDetails = () => {
     }) [id];
     // Ensure movie exists before rendering
     if (loading) {
-        return <p className="text-center text-purple-500">Loading...</p>;
+        return <p className="text-center text-pink-600">Loading...</p>;
     }
 
     if (error) {
