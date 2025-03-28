@@ -7,129 +7,168 @@ const DisplayMovie = () => {
     const [topAnime, setTopAnime] = useState([]);
     const [error, setError] = useState(null);
     const [search, setSearch] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState('movies'); // 'movies', 'tvshows', 'anime'
 
     const BASE_URL = "http://www.omdbapi.com/?i=tt3896198&apikey=855a7843";
 
-    // Fetch movies function
-   useEffect (() => {
-    const fetchMovies = async () => {
-        const response = await fetch (`${BASE_URL}&s=${search || "movies"}`);
-        const  movie = await response.json();
-        if (movie.Response === "True") {
-            setMovies(movie.Search || []);
-            setError(null);
-        } else {
-            setMovies([]);
-            setError(movie.Error);  
+    // Fetch data function
+    const fetchData = async (searchTerm, category) => {
+        setIsLoading(true);
+        try {
+            const response = await fetch(`${BASE_URL}&s=${searchTerm}`);
+            const data = await response.json();
+            
+            if (data.Response === "True") {
+                return data.Search || [];
+            } else {
+                setError(data.Error);
+                return [];
+            }
+        } catch (err) {
+            setError("Failed to fetch data");
+            return [];
+        } finally {
+            setIsLoading(false);
         }
     };
-    fetchMovies();
-    }, [search]);
 
-    useEffect (() => {
-        const fetchTopTVShows = async () => {
-            const response = await fetch (`${BASE_URL}&s=${search || "tv shows"}`);
-            const  movie = await response.json();
-            if (movie.Response === "True") {
-                setTopTVShows(movie.Search || []);
-                setError(null);
+    // Fetch movies based on active tab
+    useEffect(() => {
+        const fetchAllData = async () => {
+            if (search) {
+                // If searching, search across all categories
+                const results = await fetchData(search);
+                setMovies(results);
             } else {
-                setTopTVShows([]);
-                setError(movie.Error);  
+                // Default content when no search
+                if (activeTab === 'movies') {
+                    const movieResults = await fetchData("action");
+                    setMovies(movieResults);
+                } else if (activeTab === 'tvshows') {
+                    const tvResults = await fetchData("breaking bad");
+                    setTopTVShows(tvResults);
+                } else if (activeTab === 'anime') {
+                    const animeResults = await fetchData("naruto");
+                    setTopAnime(animeResults);
+                }
             }
         };
-        fetchTopTVShows();
-        }, [search]);
+        
+        fetchAllData();
+    }, [search, activeTab]);
 
-        useEffect (() => {
-            const fetchTopAnime = async () => {
-                const response = await fetch (`${BASE_URL}&s=${search || "anime"}`);
-                const  movie = await response.json();
-                if (movie.Response === "True") {
-                    setTopAnime(movie.Search || []);
-                    setError(null);
-                } else {
-                    setTopAnime([]);
-                    setError(movie.Error);  
-                }
-            };
-            fetchTopAnime();
-            }, [search]);
+    // Get the movie full plot
+ 
+
     // Handle Search Input
-    const handleSearch = (e) => {
+    function handleSearch(e) {
         setSearch(e.target.value);
-    };
+    }
 
-    // Handle Search Submission
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setMovies();
+    // Handle tab change
+    const handleTabChange = (tab) => {
+        setActiveTab(tab);
+        setSearch(""); // Clear search when changing tabs
     };
 
     return (
         <div className="p-4">
-            <form onSubmit={handleSubmit} className="mb-4 flex-col gap 2">
-                <label htmlFor='search' className="block text-lg font-bold text-pink-600 rounded-full">Search Movie:</label>
+            <form className="mb-6">
+                <label htmlFor='search' className="block text-lg font-bold text-pink-600 mb-2">
+                    Search:
+                </label>
                 <input 
                     type='text' 
                     value={search} 
                     onChange={handleSearch}
-                    placeholder="Enter movie name..." 
-                    className="border text-white p-2 rounded-full"
+                    placeholder={`Enter ${activeTab} name...`} 
+                    className="border border-gray-300 text-white p-2 rounded w-full md:w-1/2"
                 />
             </form>
 
-            {/* Show error message */}
-            {error && <p className="text-red-500">{error}</p>}
-
-            {/* Display movies */}
-            <div className="grid grid-cols-1 gap-7 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3">
-                {movies.length === 0 ? (
-                    <p>No movies found</p>
-                ) : (
-                    movies.map((movie, index) => (
-                        <MovieCard key={movie.imdbID} movie={{
-                            id: movie.imdbID,
-                            title: movie.Title,
-                            year: movie.Year,
-                            poster: movie.Poster
-                        }} className= {index === 0 ? "row-span-2" : ""} 
-                        />
-                    ))
-                )}
+            {/* Tabs for navigation */}
+            <div className="flex mb-6 border-b border-gray-200">
+                <button
+                    className={`py-2 px-4 font-medium ${activeTab === 'movies' ? 'text-pink-600 border-b-2 border-pink-600' : 'text-gray-500'}`}
+                    onClick={() => handleTabChange('movies')}
+                >
+                    Movies
+                </button>
+                <button
+                    className={`py-2 px-4 font-medium ${activeTab === 'tvshows' ? 'text-pink-600 border-b-2 border-pink-600' : 'text-gray-500'}`}
+                    onClick={() => handleTabChange('tvshows')}
+                >
+                    TV Shows
+                </button>
+                <button
+                    className={`py-2 px-4 font-medium ${activeTab === 'anime' ? 'text-pink-600 border-b-2 border-pink-600' : 'text-gray-500'}`}
+                    onClick={() => handleTabChange('anime')}
+                >
+                    Anime
+                </button>
             </div>
-            {/* Top TV shows */}
-                <h1 className='text-black font-bold text-3xl'>Trending Now🔥</h1>
-                <div className="grid grid-cols-1 md:grid-cols-2  gap-4">
-                    {topTVShows.length === 0 ? (
-                        <p>No TV shows found</p>
-                    ) : (
-                        topTVShows.map((show) => (
-                            <MovieCard key={show.imdbID} movie={{
-                                id: show.imdbID,
-                                title: show.Title,
-                                year: show.Year,
-                                poster: show.Poster
-                            }} />
-                        ))
+
+            {/* Show loading or error message */}
+            {isLoading && <p className="text-center py-4">Loading...</p>}
+            {error && !isLoading && <p className="text-red-500 py-4">{error}</p>}
+
+            {/* Display content based on active tab */}
+            {!isLoading && !error && (
+                <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
+                    {activeTab === 'movies' && (
+                        movies.length === 0 ? (
+                            <p className="col-span-full text-center">No movies found</p>
+                        ) : (
+                            movies.map((movie) => (
+                                <MovieCard 
+                                    key={movie.imdbID} 
+                                    movie={{
+                                        id: movie.imdbID,
+                                        title: movie.Title,
+                                        year: movie.Year,
+                                        poster: movie.Poster,
+                                    }} />
+                            )))
                     )}
-                </div>
-                {/* Top Anime  */}
-                    <h1>Top Anime</h1>
-                    <div>
-                        {topAnime.length === 0 ? (
-                            <p>No anime found</p>
+
+                    {activeTab === 'tvshows' && (
+                        topTVShows.length === 0 ? (
+                            <p className="col-span-full text-center">No TV shows found</p>
+                        ) : (
+                            topTVShows.map((show) => (
+                                <MovieCard 
+                                    key={show.imdbID} 
+                                    movie={{
+                                        id: show.imdbID,
+                                        title: show.Title,
+                                        year: show.Year,
+                                        poster: show.Poster
+                                    }} 
+                                />
+                            ))
+                        )
+                    )}
+
+                    {activeTab === 'anime' && (
+                        topAnime.length === 0 ? (
+                            <p className="col-span-full text-center">No anime found</p>
                         ) : (
                             topAnime.map((anime) => (
-                                <MovieCard key={anime.imdbID} anime= {{
-                                    id : anime.imdbID,
-                                    title : anime.Title,
-                                    year : anime.Year,
-                                    poster : anime.poster
-                                }} />
+                                <MovieCard 
+                                    key={anime.imdbID} 
+                                    movie={{
+                                        id: anime.imdbID,
+                                        title: anime.Title,
+                                        year: anime.Year,
+                                        poster: anime.Poster
+                                    }} 
+                                />
                             ))
-                        )}
-                    </div>
+                        )
+                    )}
+                </div>
+            )}
         </div>
     );
 };
