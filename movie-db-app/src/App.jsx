@@ -8,18 +8,17 @@ import MovieDetails from "./components/MovieDetails";
 const App = () => {
     return (
         <Router>
-            <div className="flex">
+            <div className="flex bg-black">
                 {/* Sidebar Navigation */}
                 <NavPage />
 
                 {/* Main Content Area */}
-                <div className="ml-80 p-4 bg-black ">
+                <div className="ml-80 p-4 flex-1 ">
                     <Routes>
                         <Route path="/" element={<DisplayMovie />} />
                         <Route path="/discover" element={<Discover />} />
-                        <Route path="/" element={<DisplayMovie />} />
                         <Route path="/movies/:id" element={<MovieDetails />} />
-                        <Route path="/tv" element={<h1 className='text-2xl text-center'>TV Shows Page (Coming Soon)</h1>} />
+                        <Route path="/tv" element={<h1 className='text-2xl text-white text-center'>Your favorites</h1>} />
                     </Routes>
                  </div>
             </div>

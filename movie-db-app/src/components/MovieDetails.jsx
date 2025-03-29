@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const MovieDetails = () => {
     const { id } = useParams(); // extracts imdb id from url
@@ -36,7 +36,7 @@ const MovieDetails = () => {
     if (error) return <p className="text-center text-red-500">{error}</p>;
 
     return (
-        <div className='bg-black'>
+        <div className='bg-black h-screen'>
             <h1 className="text-2xl font-bold text-pink-600 mb-4">Movie Details</h1>
             <div className="flex flex-col md:flex-row gap-6">
                 <img 
@@ -51,11 +51,16 @@ const MovieDetails = () => {
                     <p className="mt-2"><strong>Genre:</strong> {movie.Genre}</p>
                     <p className="mt-2"><strong>Director:</strong> {movie.Director}</p>
                     <p className="mt-2"><strong>Actors:</strong> {movie.Actors}</p>
+                    <button className='border text-white 
+                    rounded-full p-2 mt-10 cursor-pointer 
+                    border-gray-900 bg-pink-600'>
+                      Watch Trailer</button>
+                    <Link to="/" className="text-pink-500 ml-10 ">Home</Link>
                 </div>
             </div>
-            <button className=" border text-white rounded-full p-2 mt-8 cursor-pointer bg-pink-600 hover:bg-pink-800 border-gray-900">Watch Trailer </button>
-            <button className=" border text-white rounded-full p-2 mt-8 cursor-pointer bg-pink-600 hover:bg-pink-800 border-gray-900">Add to Favorites </button>
-            <button  className=" border text-white rounded-full p-2 mt-8 cursor-pointer bg-pink-600 hover:bg-pink-800 border-gray-900">Back to Home </button>
+            {/* <Link><button className=" border text-white rounded-full p-2 mt-8 cursor-pointer bg-pink-600 hover:bg-pink-800 border-gray-900">Watch Trailer </button></Link>
+            <Link><button className=" border text-white rounded-full p-2 mt-8 cursor-pointer bg-pink-600 hover:bg-pink-800 border-gray-900">Add to Favorites </button></Link> */}
+            {/* <Link to= "/"><button  className=" border text-white rounded-full p-2 mt-8 cursor-pointer bg-pink-600 hover:bg-pink-800 border-gray-900">Back to Home </button></Link> */}
           
         </div>
     );

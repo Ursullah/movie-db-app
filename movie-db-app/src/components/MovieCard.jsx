@@ -1,42 +1,13 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
-const MovieCard = ({ movie, }) => {
+const MovieCard = ({ movie, addToFavorites }) => {
   if (!movie) {
     return <p className="text-center text-red-500">Movie data is missing!</p>;
   }
 
-  const {id} = useParams(movie)
-
-   const BASE_URL =  "http://www.omdbapi.com/?apikey=855a7843"
-  
-      // Fetch movie details function
-      useEffect(() => {
-          const fetchMovieDetails = async () => {
-              try {
-                  setLoading(true);
-                  const response = await fetch(`${BASE_URL}&i=${id}&plot=full`);
-                  const data = await response.json();
-                  
-                  if (data.Response === "True") {
-                      setMovie(data);
-                  } else {
-                      setError(data.Error || "Movie not found");
-                  }
-              } catch (err) {
-                  setError("Failed to fetch data");
-              } finally {
-                  setLoading(false);
-              }
-          };
-  
-          fetchMovieDetails();
-      }, [id]);
-
-
   return (
-      <div className= "bg-gray-900 text-white shadow-lg rounded-4xl p-4 transition-transform transform hover:scale-105">
+    <div className="bg-gray-900 text-white shadow-lg rounded-xl p-4 transition-transform transform hover:scale-105">
       <Link to={`/movies/${movie.id}`}>
         <img
           src={movie.poster}
@@ -45,12 +16,16 @@ const MovieCard = ({ movie, }) => {
         />
         <h2 className="text-lg font-bold mt-2">{movie.title}</h2>
         <p className="text-gray-400">{movie.year}</p>
-        <button className="text-white"> Watch Trailer </button>
-        <button className="text-white">Play</button>
-        <button className="text-white bg-blue-900">Add to Watchlist</button>
       </Link>
-      </div>
-    
+
+      {/* Add to Favorites Button */}
+      <button 
+        onClick={() => addToFavorites(movie)} 
+        className="mt-2 hover:underline text-pink-600 rounded-lg"
+      >
+        Add to Favorites
+      </button>
+    </div>
   );
 };
 
