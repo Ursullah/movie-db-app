@@ -45,6 +45,9 @@ const MovieCard = ({ movie, }) => {
         />
         <h2 className="text-lg font-bold mt-2">{movie.title}</h2>
         <p className="text-gray-400">{movie.year}</p>
+        <button className="text-white"> Watch Trailer </button>
+        <button className="text-white">Play</button>
+        <button className="text-white bg-blue-900">Add to Watchlist</button>
       </Link>
       </div>
     

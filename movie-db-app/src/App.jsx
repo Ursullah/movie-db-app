@@ -13,7 +13,7 @@ const App = () => {
                 <NavPage />
 
                 {/* Main Content Area */}
-                <div className="ml-80 p-6 bg-black h-screen w-full">
+                <div className="ml-80 p-4 bg-black ">
                     <Routes>
                         <Route path="/" element={<DisplayMovie />} />
                         <Route path="/discover" element={<Discover />} />

@@ -36,13 +36,13 @@ const MovieDetails = () => {
     if (error) return <p className="text-center text-red-500">{error}</p>;
 
     return (
-        <div className="p-6">
+        <div className='bg-black'>
             <h1 className="text-2xl font-bold text-pink-600 mb-4">Movie Details</h1>
             <div className="flex flex-col md:flex-row gap-6">
                 <img 
                     src={movie.Poster} 
                     alt={movie.Title} 
-                    className="w-full md:w-1/3 rounded-lg shadow-md"
+                    className="w-full md:w-1/2 rounded-lg shadow-md"
                 />
                 <div className='text-white'>
                     <h2 className="text-xl text-pink-600 font-semibold">{movie.Title} ({movie.Year})</h2>
@@ -53,9 +53,10 @@ const MovieDetails = () => {
                     <p className="mt-2"><strong>Actors:</strong> {movie.Actors}</p>
                 </div>
             </div>
-            <button >Watch Trailer </button>
-            <button >Add to Favorites </button>
-            <button >Back to Home </button>
+            <button className=" border text-white rounded-full p-2 mt-8 cursor-pointer bg-pink-600 hover:bg-pink-800 border-gray-900">Watch Trailer </button>
+            <button className=" border text-white rounded-full p-2 mt-8 cursor-pointer bg-pink-600 hover:bg-pink-800 border-gray-900">Add to Favorites </button>
+            <button  className=" border text-white rounded-full p-2 mt-8 cursor-pointer bg-pink-600 hover:bg-pink-800 border-gray-900">Back to Home </button>
+          
         </div>
     );
 };
