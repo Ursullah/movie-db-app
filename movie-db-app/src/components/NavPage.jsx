@@ -16,7 +16,7 @@ const NavPage = () => {
           { name: "Home", path: "/" },
           { name: "Discover", path: "/discover" },
           { name: "Movies", path: "/movies" },
-          { name: "TV", path: "/tv" },
+          { name: "Favorites", path: "/favorites" },
         ].map((item) => (
           <Link
             key={item.path}

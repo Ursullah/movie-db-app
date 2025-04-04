@@ -5,13 +5,20 @@ const DisplayMovie = () => {
     const [trending, setTrending] = useState([]);
     const [topRated, setTopRated] = useState([]);
     const [upcoming, setUpcoming] = useState([]);
+    const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [search, setSearch] = useState("");
 
     const BASE_URL = "http://www.omdbapi.com/?apikey=855a7843";
 
-    // Fetch movies based on category
+    const addToFavorites = (movie) => {
+        if (!favorites.find((fav) => fav.id === movie.id)) {
+            setFavorites((prev) => [...prev, movie]);
+            alert(`${movie.title} added to favorites!`);
+        }
+    };
+
     useEffect(() => {
         const fetchMovies = async (query, setter) => {
             setLoading(true);
@@ -34,7 +41,6 @@ const DisplayMovie = () => {
         fetchMovies("Spider-Man", setUpcoming);
     }, []);
 
-    // Fetch search results
     useEffect(() => {
         if (!search) return;
         const fetchSearchResults = async () => {
@@ -57,7 +63,6 @@ const DisplayMovie = () => {
         fetchSearchResults();
     }, [search]);
 
-    // Handle Search Input
     const handleSearch = (e) => {
         setSearch(e.target.value);
     };
@@ -77,7 +82,6 @@ const DisplayMovie = () => {
                 />
             </form>
 
-            {/* Show loading message */}
             {loading && <p>Loading...</p>}
             {error && <p className="text-red-500">{error}</p>}
 
@@ -88,12 +92,16 @@ const DisplayMovie = () => {
                     <p>No movies found</p>
                 ) : (
                     trending.map((movie) => (
-                        <MovieCard key={movie.imdbID} movie={{
-                          id: movie.imdbID,
-                            title: movie.Title,
-                            year: movie.Year,
-                            poster: movie.Poster
-                        }} />
+                        <MovieCard
+                            key={movie.imdbID}
+                            movie={{
+                                id: movie.imdbID,
+                                title: movie.Title,
+                                year: movie.Year,
+                                poster: movie.Poster,
+                            }}
+                            addToFavorites={addToFavorites}
+                        />
                     ))
                 )}
             </div>
@@ -105,12 +113,16 @@ const DisplayMovie = () => {
                     <p>No movies found</p>
                 ) : (
                     topRated.map((movie) => (
-                        <MovieCard key={movie.imdbID} movie={{
-                          id: movie.imdbID,
-                            title: movie.Title,
-                            year: movie.Year,
-                            poster: movie.Poster
-                        }} />
+                        <MovieCard
+                            key={movie.imdbID}
+                            movie={{
+                                id: movie.imdbID,
+                                title: movie.Title,
+                                year: movie.Year,
+                                poster: movie.Poster,
+                            }}
+                            addToFavorites={addToFavorites}
+                        />
                     ))
                 )}
             </div>
@@ -122,15 +134,35 @@ const DisplayMovie = () => {
                     <p>No movies found</p>
                 ) : (
                     upcoming.map((movie) => (
-                        <MovieCard key={movie.imdbID} movie={{
-                          id: movie.imdbID,
-                            title: movie.Title,
-                            year: movie.Year,
-                            poster: movie.Poster
-                        }} />
+                        <MovieCard
+                            key={movie.imdbID}
+                            movie={{
+                                id: movie.imdbID,
+                                title: movie.Title,
+                                year: movie.Year,
+                                poster: movie.Poster,
+                            }}
+                            addToFavorites={addToFavorites}
+                        />
                     ))
                 )}
             </div>
+
+            {/* Favorites Section */}
+            <h2 className="text-xl font-bold text-white mt-4 mb-2">❤️ Favorites</h2>
+            {favorites.length === 0 ? (
+                <p className="text-gray-400">No favorites yet</p>
+            ) : (
+                <div className="grid grid-cols-1 gap-7 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4">
+                    {favorites.map((movie) => (
+                        <MovieCard
+                            key={movie.id}
+                            movie={movie}
+                            isFavorite={true}
+                        />
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

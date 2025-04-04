@@ -26,9 +26,9 @@ const Discover = () => {
 
     return (
         <div className="p-4">
-            <h1 className="text-2xl font-bold text-purple-700 text-center mb-4">Discover Trending Movies</h1>
+            <h1 className="text-2xl font-bold text-pink-600 text-center mb-4">Discover Trending Movies</h1>
             {loading ? (
-                <p className="text-center text-purple-500">Loading...</p>
+                <p className="text-center text-pink-500">Loading...</p>
             ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 gap-8">
                     {movies.length === 0 ? (

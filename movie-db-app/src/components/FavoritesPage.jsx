@@ -1,0 +1,35 @@
+import React, { useEffect, useState } from "react";
+import MovieCard from "./MovieCard";
+
+const FavoritesPage = () => {
+  const [favorites, setFavorites] = useState([]);
+
+  useEffect(() => {
+    // Load favorites from localStorage if you want it persistent
+    const storedFavorites = localStorage.getItem("favorites");
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    }
+  }, []);
+
+  return (
+    <div className="p-4 bg-gray-900 min-h-screen">
+      <h2 className="text-xl font-bold text-white mt-4 mb-4">❤️ Your Favorite Movies</h2>
+      {favorites.length === 0 ? (
+        <p className="text-gray-400">No favorites yet</p>
+      ) : (
+        <div className="grid grid-cols-1 gap-7 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4">
+          {favorites.map((movie) => (
+            <MovieCard
+              key={movie.id}
+              movie={movie}
+              isFavorite={true}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default FavoritesPage;

@@ -32,6 +32,11 @@ const MovieDetails = () => {
         fetchMovieDetails();
     }, [id]);
 
+    const handleWatchTrailer = () =>{
+        const trailUrl = `https://www.youtube.com/results?search_query=${movie.Title}+trailer`;
+        window.open(trailUrl, "_blank");
+    }
+
     if (loading) return <p className="text-center text-pink-600">Loading...</p>;
     if (error) return <p className="text-center text-red-500">{error}</p>;
 
@@ -51,9 +56,12 @@ const MovieDetails = () => {
                     <p className="mt-2"><strong>Genre:</strong> {movie.Genre}</p>
                     <p className="mt-2"><strong>Director:</strong> {movie.Director}</p>
                     <p className="mt-2"><strong>Actors:</strong> {movie.Actors}</p>
-                    <button className='border text-white 
+                    <button
+                    onClick={handleWatchTrailer}
+                    className='border text-white 
                     rounded-full p-2 mt-10 cursor-pointer 
-                    border-gray-900 bg-pink-600'>
+                    border-gray-900 bg-pink-600'
+                    >
                       Watch Trailer</button>
                     <Link to="/" className="text-pink-500 ml-10 ">Home</Link>
                 </div>
