@@ -15,7 +15,7 @@ const Discover = () => {
     const fetchDiscoverMovies = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=trending`);
+            const response = await fetch(`${BASE_URL}?apikey=${API_KEY}&s=trending`);
             const data = await response.json();
             setMovies(data.Search || []);
         } catch (error) {

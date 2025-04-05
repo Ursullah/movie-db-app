@@ -6,7 +6,7 @@ FilmSphere is a movie database web application that allows users to browse and d
 -  **Movie Listings:** Display movies dynamically from the OMDb API.
 -  **Sidebar Navigation:** Quick access to Home, Discover, Movies, and TV sections.
 -  **Discover Page:** Browse different movie categories.
--  **Favorites Page:** Add your favorite movies to rewatch or recommend to someone.
+-  **Favorites Page:** Add your favorite movies to rewatch or recommend to someone and remove a movie from favorites.
 -  **Movie Details:** Click on a movie to view detailed information.
 -  **Modern UI:** Dark theme with pink highlights for an elegant design.
 
