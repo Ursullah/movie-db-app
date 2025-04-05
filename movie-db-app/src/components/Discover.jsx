@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MovieCard from "./MovieCard";
 
+const BASE_URL = "https://www.omdbapi.com/";
 const API_KEY = "7c9e2542";
 
 const Discover = () => {
