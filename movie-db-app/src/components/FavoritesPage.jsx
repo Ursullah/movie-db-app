@@ -21,7 +21,7 @@ const FavoritesPage = () => {
       };
 
   return (
-    <div className="p-4 bg-gray-900 min-h-screen">
+    <div className="p-4 bg-black min-h-screen">
       <h2 className="text-xl font-bold text-white mt-4 mb-4">❤️ Your Favorite Movies</h2>
       {favorites.length === 0 ? (
         <p className="text-gray-400">No favorites yet</p>

@@ -147,22 +147,6 @@ const DisplayMovie = () => {
                     ))
                 )}
             </div>
-
-            {/* Favorites Section */}
-            <h2 className="text-xl font-bold text-white mt-4 mb-2">❤️ Favorites</h2>
-            {favorites.length === 0 ? (
-                <p className="text-gray-400">No favorites yet</p>
-            ) : (
-                <div className="grid grid-cols-1 gap-7 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4">
-                    {favorites.map((movie) => (
-                        <MovieCard
-                            key={movie.id}
-                            movie={movie}
-                            isFavorite={true}
-                        />
-                    ))}
-                </div>
-            )}
         </div>
     );
 };
