@@ -7,7 +7,7 @@ const MovieDetails = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const BASE_URL =  "http://www.omdbapi.com/?apikey=855a7843"
+    const BASE_URL =  "http://www.omdbapi.com/?apikey=7c9e2542";
 
     // Fetch movie details function
     useEffect(() => {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MovieCard from "./MovieCard";
 
-const API_KEY = "855a7843";
+const API_KEY = "7c9e2542";
 
 const Discover = () => {
     const [movies, setMovies] = useState([]);

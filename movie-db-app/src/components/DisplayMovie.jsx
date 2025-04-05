@@ -10,7 +10,7 @@ const DisplayMovie = () => {
     const [error, setError] = useState(null);
     const [search, setSearch] = useState("");
 
-    const BASE_URL = "http://www.omdbapi.com/?apikey=855a7843";
+    const BASE_URL = "http://www.omdbapi.com/?i=tt3896198&apikey=7c9e2542";
 
     const addToFavorites = (movie) => {
         if (!favorites.find((fav) => fav.id === movie.id)) {
