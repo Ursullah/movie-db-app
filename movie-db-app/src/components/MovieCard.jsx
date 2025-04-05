@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const MovieCard = ({ movie, addToFavorites, isFavorite }) => {
+const MovieCard = ({ movie, addToFavorites,removeFromFavorites, isFavorite }) => {
   if (!movie) {
     return <p className="text-center text-red-500">Movie data is missing!</p>;
   }
@@ -25,6 +25,16 @@ const MovieCard = ({ movie, addToFavorites, isFavorite }) => {
           className="mt-2 hover:underline text-pink-600 rounded-lg"
         >
           Add to Favorites
+        </button>
+      )}
+
+         {/* Remove from Favorites Button */}
+         {removeFromFavorites && isFavorite && (
+        <button 
+          onClick={() => removeFromFavorites(movie)} 
+          className="mt-2 hover:underline text-red-600 rounded-lg"
+        >
+          Remove from Favorites
         </button>
       )}
     </div>
