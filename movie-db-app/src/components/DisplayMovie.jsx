@@ -10,7 +10,8 @@ const DisplayMovie = () => {
     const [error, setError] = useState(null);
     const [search, setSearch] = useState("");
 
-    const BASE_URL = "http://www.omdbapi.com/?i=tt3896198&apikey=7c9e2542";
+    const BASE_URL = "https://www.omdbapi.com/";
+    const API_KEY = "7c9e2542";
 
     const addToFavorites = (movie) => {
         if (!favorites.find((fav) => fav.id === movie.id)) {
@@ -19,23 +20,25 @@ const DisplayMovie = () => {
         }
     };
 
-    useEffect(() => {
-        const fetchMovies = async (query, setter) => {
-            setLoading(true);
-            try {
-                const response = await fetch(`${BASE_URL}&s=${query}`);
-                const data = await response.json();
-                if (data.Response === "True") {
-                    setter(data.Search || []);
-                } else {
-                    setter([]);
-                }
-            } catch (err) {
-                setError("Failed to fetch movies. Try again later.");
+    const fetchMovies = async (query, setter) => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${BASE_URL}?apikey=${API_KEY}&s=${query}`);
+            const data = await response.json();
+            if (data.Response === "True") {
+                setter(data.Search || []);
+            } else {
+                setter([]);
+                console.warn(`OMDb API error: ${data.Error}`);
             }
-            setLoading(false);
-        };
+        } catch (err) {
+            console.error("Failed to fetch movies:", err);
+            setError("Failed to fetch movies. Try again later.");
+        }
+        setLoading(false);
+    };
 
+    useEffect(() => {
         fetchMovies("Avengers", setTrending);
         fetchMovies("Batman", setTopRated);
         fetchMovies("Spider-Man", setUpcoming);
@@ -47,7 +50,7 @@ const DisplayMovie = () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch(`${BASE_URL}&s=${search}`);
+                const response = await fetch(`${BASE_URL}?apikey=${API_KEY}&s=${search}`);
                 const data = await response.json();
                 if (data.Response === "True") {
                     setTrending(data.Search || []);
@@ -82,14 +85,14 @@ const DisplayMovie = () => {
                 />
             </form>
 
-            {loading && <p>Loading...</p>}
+            {loading && <p className="text-white">Loading...</p>}
             {error && <p className="text-red-500">{error}</p>}
 
             {/* Trending Movies */}
             <h2 className="text-xl font-bold text-white mt-4 mb-2">🔥 Trending Movies</h2>
             <div className="grid grid-cols-1 gap-7 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4">
                 {trending.length === 0 && !loading ? (
-                    <p>No movies found</p>
+                    <p className="text-white">No movies found</p>
                 ) : (
                     trending.map((movie) => (
                         <MovieCard
@@ -110,7 +113,7 @@ const DisplayMovie = () => {
             <h2 className="text-xl font-bold text-white mt-4 mb-2">⭐ Top Rated</h2>
             <div className="grid grid-cols-1 gap-7 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4">
                 {topRated.length === 0 && !loading ? (
-                    <p>No movies found</p>
+                    <p className="text-white">No movies found</p>
                 ) : (
                     topRated.map((movie) => (
                         <MovieCard
@@ -131,7 +134,7 @@ const DisplayMovie = () => {
             <h2 className="text-xl font-bold text-white mt-4 mb-2">🎬 Upcoming</h2>
             <div className="grid grid-cols-1 gap-7 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4">
                 {upcoming.length === 0 && !loading ? (
-                    <p>No movies found</p>
+                    <p className="text-white">No movies found</p>
                 ) : (
                     upcoming.map((movie) => (
                         <MovieCard
