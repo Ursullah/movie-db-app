@@ -13,10 +13,24 @@ const DisplayMovie = () => {
     const BASE_URL = "https://www.omdbapi.com/";
     const API_KEY = "7c9e2542";
 
+    // Load favorites from localStorage on mount
+    useEffect(() => {
+        const storedFavorites = localStorage.getItem("favorites");
+        if (storedFavorites) {
+            setFavorites(JSON.parse(storedFavorites));
+        }
+    }, []);
+
     const addToFavorites = (movie) => {
-        if (!favorites.find((fav) => fav.id === movie.id)) {
-            setFavorites((prev) => [...prev, movie]);
+        const existingFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+        if (!existingFavorites.find((fav) => fav.id === movie.id)) {
+            const updatedFavorites = [...existingFavorites, movie];
+            localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+            setFavorites(updatedFavorites); // Optional if displaying favorites locally
             alert(`${movie.title} added to favorites!`);
+        } else {
+            alert(`${movie.title} is already in favorites!`);
         }
     };
 
@@ -81,7 +95,7 @@ const DisplayMovie = () => {
                     value={search}
                     onChange={handleSearch}
                     placeholder="Enter movie name..."
-                    className="border text-white p-2 rounded-full"
+                    className="border text-white bg-gray-800 p-2 rounded-full w-full mt-2"
                 />
             </form>
 
@@ -90,7 +104,7 @@ const DisplayMovie = () => {
 
             {/* Trending Movies */}
             <h2 className="text-xl font-bold text-white mt-4 mb-2">🔥 Trending Movies</h2>
-            <div className="grid grid-cols-1 gap-7 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-7 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
                 {trending.length === 0 && !loading ? (
                     <p className="text-white">No movies found</p>
                 ) : (
@@ -111,7 +125,7 @@ const DisplayMovie = () => {
 
             {/* Top Rated Movies */}
             <h2 className="text-xl font-bold text-white mt-4 mb-2">⭐ Top Rated</h2>
-            <div className="grid grid-cols-1 gap-7 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-7 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
                 {topRated.length === 0 && !loading ? (
                     <p className="text-white">No movies found</p>
                 ) : (
@@ -132,7 +146,7 @@ const DisplayMovie = () => {
 
             {/* Upcoming Movies */}
             <h2 className="text-xl font-bold text-white mt-4 mb-2">🎬 Upcoming</h2>
-            <div className="grid grid-cols-1 gap-7 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-7 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
                 {upcoming.length === 0 && !loading ? (
                     <p className="text-white">No movies found</p>
                 ) : (
